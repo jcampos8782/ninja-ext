@@ -1,0 +1,8 @@
+# Eclipse files
+.settings/*
+.classpath
+.project
+
+# Build artifacts
+**/target/*
+/target/
