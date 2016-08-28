@@ -1,6 +1,12 @@
 package me.jcampos.ninja.ext.modules;
 
+import static com.google.inject.matcher.Matchers.annotatedWith;
+import static com.google.inject.matcher.Matchers.any;
+
 import javax.inject.Singleton;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.AbstractModule;
@@ -9,6 +15,8 @@ import me.jasoncampos.inject.persist.hibernate.HibernateEntityClassProvider;
 import me.jasoncampos.inject.persist.hibernate.HibernatePersistModule;
 import me.jasoncampos.inject.persist.hibernate.HibernatePropertyProvider;
 import ninja.jpa.JpaInitializer;
+import ninja.jpa.UnitOfWork;
+import ninja.jpa.UnitOfWorkInterceptor;
 
 /**
  * Provides hibernate bootstrapping for the <a href="http://www.ninjaframework.org">Ninja Framework</a>. Uses a
@@ -39,6 +47,7 @@ import ninja.jpa.JpaInitializer;
  * @author Jason Campos <jcmapos8782@gmail.com>
  */
 public class HibernateModule extends AbstractModule {
+	private static final Logger logger = LoggerFactory.getLogger(HibernateModule.class);
 
 	private final Class<? extends HibernateEntityClassProvider> hibernateEntityClassProviderClass;
 	private final Class<? extends HibernatePropertyProvider> hibernatePropertyProviderClass;
@@ -58,6 +67,8 @@ public class HibernateModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		logger.info("Intializing {}", this.getClass().getName());
+
 		// Binding can either be to a class or an instance
 		if (hibernateEntityClassProvider != null) {
 			bind(HibernateEntityClassProvider.class).toInstance(hibernateEntityClassProvider);
@@ -72,6 +83,22 @@ public class HibernateModule extends AbstractModule {
 		}
 
 		install(new HibernatePersistModule());
+
+		final UnitOfWorkInterceptor unitOfWorkInterceptor = new UnitOfWorkInterceptor();
+		requestInjection(unitOfWorkInterceptor);
+
+		// class-level @UnitOfWork
+		bindInterceptor(
+				annotatedWith(UnitOfWork.class),
+				any(),
+				unitOfWorkInterceptor);
+
+		// method-level @UnitOfWork
+		bindInterceptor(
+				any(),
+				annotatedWith(UnitOfWork.class),
+				unitOfWorkInterceptor);
+
 		bind(JpaInitializer.class).asEagerSingleton();
 	}
 
