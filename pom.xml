@@ -11,7 +11,7 @@
   <dependencies>
     <dependency>
         <groupId>me.jasoncampos</groupId>
-        <artifactId>guice-persist-hibernate</artifactId>
+        <artifactId>guice-persist-hibernate-core</artifactId>
         <version>0.1-SNAPSHOT</version>
     </dependency>
 	<dependency>
