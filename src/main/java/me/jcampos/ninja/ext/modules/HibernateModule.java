@@ -44,7 +44,7 @@ import ninja.jpa.UnitOfWorkInterceptor;
  * inside of your FrameworkModule. Simply setting {@code NinjaClassicModule.jpa(true)} will *not* install this module.
  * In fact, installation of that module may conflict. The two should not be installed together.
  *
- * @author Jason Campos <jcmapos8782@gmail.com>
+ * @author Jason Campos <jcampos8782@gmail.com>
  */
 public class HibernateModule extends AbstractModule {
 	private static final Logger logger = LoggerFactory.getLogger(HibernateModule.class);
