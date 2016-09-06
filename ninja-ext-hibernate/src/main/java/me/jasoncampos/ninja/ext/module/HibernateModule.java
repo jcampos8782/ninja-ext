@@ -1,4 +1,4 @@
-package me.jcampos.ninja.ext.modules;
+package me.jasoncampos.ninja.ext.module;
 
 import static com.google.inject.matcher.Matchers.annotatedWith;
 import static com.google.inject.matcher.Matchers.any;
