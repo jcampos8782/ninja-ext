@@ -3,12 +3,17 @@ package me.jasoncampos.ninja.ext.module;
 import static com.google.inject.matcher.Matchers.annotatedWith;
 import static com.google.inject.matcher.Matchers.any;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.inject.Singleton;
 
+import org.hibernate.integrator.spi.Integrator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.AbstractModule;
 
 import me.jasoncampos.inject.persist.hibernate.HibernateEntityClassProvider;
@@ -53,16 +58,19 @@ public class HibernateModule extends AbstractModule {
 	private final Class<? extends HibernatePropertyProvider> hibernatePropertyProviderClass;
 	private final HibernateEntityClassProvider hibernateEntityClassProvider;
 	private final HibernatePropertyProvider hibernatePropertyProvider;
+	private final ImmutableSet<Integrator> integrators;
 
 	private HibernateModule(
 			final Class<? extends HibernateEntityClassProvider> hibernateEntityClassProviderClass,
 			final Class<? extends HibernatePropertyProvider> hibernatePropertyProviderClass,
 			final HibernateEntityClassProvider hibernateEntityClassProvider,
-			final HibernatePropertyProvider hibernatePropertyProvider) {
+			final HibernatePropertyProvider hibernatePropertyProvider,
+			final ImmutableSet<Integrator> integrators) {
 		this.hibernateEntityClassProviderClass = hibernateEntityClassProviderClass;
 		this.hibernatePropertyProviderClass = hibernatePropertyProviderClass;
 		this.hibernateEntityClassProvider = hibernateEntityClassProvider;
 		this.hibernatePropertyProvider = hibernatePropertyProvider;
+		this.integrators = integrators;
 	}
 
 	@Override
@@ -82,7 +90,9 @@ public class HibernateModule extends AbstractModule {
 			bind(HibernatePropertyProvider.class).to(hibernatePropertyProviderClass).in(Singleton.class);
 		}
 
-		install(new HibernatePersistModule());
+		final HibernatePersistModule hibernatePersistModule = new HibernatePersistModule();
+		hibernatePersistModule.addIntegrators(integrators);
+		install(hibernatePersistModule);
 
 		final UnitOfWorkInterceptor unitOfWorkInterceptor = new UnitOfWorkInterceptor();
 		requestInjection(unitOfWorkInterceptor);
@@ -107,6 +117,7 @@ public class HibernateModule extends AbstractModule {
 		private Class<? extends HibernatePropertyProvider> hibernatePropertyProviderClass;
 		private HibernateEntityClassProvider hibernateEntityClassProvider;
 		private HibernatePropertyProvider hibernatePropertyProvider;
+		private final Set<Integrator> integrators = new HashSet<>();
 
 		public Builder entityClassProvider(final Class<? extends HibernateEntityClassProvider> entityClassProvider) {
 			this.hibernateEntityClassProviderClass = entityClassProvider;
@@ -128,6 +139,11 @@ public class HibernateModule extends AbstractModule {
 			return this;
 		}
 
+		public Builder addIntegrator(final Integrator integrator) {
+			integrators.add(integrator);
+			return this;
+		}
+
 		public HibernateModule build() {
 			Preconditions.checkState(
 					hibernateEntityClassProvider != null || hibernateEntityClassProviderClass != null,
@@ -141,7 +157,8 @@ public class HibernateModule extends AbstractModule {
 					hibernateEntityClassProviderClass,
 					hibernatePropertyProviderClass,
 					hibernateEntityClassProvider,
-					hibernatePropertyProvider);
+					hibernatePropertyProvider,
+					ImmutableSet.copyOf(integrators));
 		}
 	}
 }
