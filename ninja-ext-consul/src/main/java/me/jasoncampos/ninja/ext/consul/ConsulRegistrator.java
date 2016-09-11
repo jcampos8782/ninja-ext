@@ -43,7 +43,7 @@ public class ConsulRegistrator {
 		this.ninjaProperties = ninjaProperties;
 	}
 
-	@Start(order = 90)
+	@Start(order = 90) // Dont register until end of startup
 	public void onStart() throws NotRegisteredException {
 		final String name = ninjaProperties.get("application.name");
 		final int port = ninjaProperties.getInteger("ninja.port");
@@ -66,7 +66,7 @@ public class ConsulRegistrator {
 		heartbeat = scheduler.scheduleAtFixedRate(beater, ttl / 2, ttl / 2, TimeUnit.SECONDS);
 	}
 
-	@Dispose(order = 90)
+	@Dispose(order = 10) // Deregister early in shutdown phase
 	public void onShutdown() {
 		logger.info(String.format("Deregistering %s from consul. id: %s", ninjaProperties.get("application.name"), id));
 		heartbeat.cancel(true);
