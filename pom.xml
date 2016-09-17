@@ -11,6 +11,26 @@
     <module>ninja-ext-consul</module>
     <module>ninja-ext-rabbitmq</module>
   </modules>
+     
+  <scm>
+     <url>https://github.com/jcampos8782/ninja-ext</url>
+     <connection>scm:git:git://github.com/jcampos8782/ninja-ext.git</connection>
+     <developerConnection>scm:git:git@github.com:jcampos8782/ninja-ext.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+    
+  <distributionManagement>
+    <repository>
+         <id>nexus</id>
+         <name>Nexus</name>
+         <url>https://nexus.jasoncampos.me/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+         <id>nexus</id>
+         <name>Nexus snapshots</name>
+         <url>https://nexus.jasoncampos.me/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
   
   <properties>
     <version.certified>0.1.0-SNAPSHOT</version.certified>
@@ -82,6 +102,30 @@
             <encoding>UTF-8</encoding>
           </configuration>
         </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>2.5.3</version>
+            <configuration>
+                <arguments>-Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true</arguments>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.9</version>
+            <executions>
+                <execution>
+                    <id>attach-javadocs</id>
+                    <goals>
+                        <goal>jar</goal>
+                    </goals>
+                    <configuration>
+                        <additionalparam>-Xdoclint:none</additionalparam>
+                    </configuration>
+                </execution>
+            </executions>
+         </plugin>
       </plugins>
     </pluginManagement>
   </build>
