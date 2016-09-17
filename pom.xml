@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.jasoncampos</groupId>
   <artifactId>ninja-ext</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.0</version>
   <packaging>pom</packaging>
   
   <modules>
@@ -16,7 +16,7 @@
      <url>https://github.com/jcampos8782/ninja-ext</url>
      <connection>scm:git:git://github.com/jcampos8782/ninja-ext.git</connection>
      <developerConnection>scm:git:git@github.com:jcampos8782/ninja-ext.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>ninja-ext-0.1.0</tag>
   </scm>
     
   <distributionManagement>
