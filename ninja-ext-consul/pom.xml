@@ -4,7 +4,7 @@
   <parent>
     <groupId>me.jasoncampos</groupId>
     <artifactId>ninja-ext</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1-SNAPSHOT</version>
   </parent>
   <artifactId>ninja-ext-consul</artifactId>
   <name>ninja-ext-consul</name>
