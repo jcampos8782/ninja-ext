@@ -10,6 +10,7 @@
     <module>ninja-ext-hibernate</module>
     <module>ninja-ext-consul</module>
     <module>ninja-ext-rabbitmq</module>
+    <module>ninja-ext-redis</module>
   </modules>
      
   <scm>
@@ -38,6 +39,7 @@
     <version.guice>4.0</version.guice>
     <version.guice-persist-hibernate>0.1.0</version.guice-persist-hibernate>
     <version.hibernate>5.2.2.Final</version.hibernate>
+    <version.jedis>2.9.0</version.jedis>
     <version.ninja>5.7.0</version.ninja>
     <version.rabbitmq>3.6.5</version.rabbitmq>
     <version.slf4j-api>1.7.21</version.slf4j-api>
@@ -85,6 +87,11 @@
             <artifactId>certified-rabbitmq</artifactId>
             <version>${version.certified}</version>
          </dependency>
+         <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${version.jedis}</version>
+        </dependency>
 	  </dependencies>
   </dependencyManagement>
   
